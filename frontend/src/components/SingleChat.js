@@ -11,7 +11,7 @@ import io from "socket.io-client";
 import Lottie from 'react-lottie';
 import animationData from '../animations/typing-animation.json';
 
-const ENDPOINT = 'http://localhost:5000';
+const ENDPOINT = 'https://talk2-676e48f9b841.herokuapp.com/';
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -33,7 +33,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     };
 
     const toast = useToast();
-    const { user, selectedChat, setSelectedChat } = ChatState();
+    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
 
     const fetchMessages = async () => {
         if(!selectedChat)   return;
@@ -79,10 +79,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       selectedChatCompare = selectedChat;
     }, [selectedChat])
 
+    // console.log(notification, "---------");
+
     useEffect(() => {
       socket.on('message recived', (newMessageRecived) => {
         if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
             // give notification
+            if(!notification.includes(newMessageRecived)) {
+                setNotification([newMessageRecived, ...notification]);
+                setFetchAgain(!fetchAgain);
+            }
         } else {
             setMessages([...messages, newMessageRecived]);
         }
@@ -197,7 +203,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         margin="auto"
                     />
                 ) : (
-                    <div className="messages" style={{display: "flex", flexDirection: "column", overflowY: "scroll", scrollbarWidth: "none"}}>
+                    <div className="messages" style={{display: "flex", flexDirection: "column", height: "70vh",overflowY: "scroll", scrollbarWidth: "none"}}>
                         <ScrollableChat 
                             messages={messages}
                         />

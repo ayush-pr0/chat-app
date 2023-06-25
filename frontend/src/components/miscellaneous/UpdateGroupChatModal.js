@@ -165,13 +165,13 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     const handleSearch = async (search) => {
         if (!search) {
           setSearchResult([]);
-            // toast({
-            //     title: "Please enter something in search",
-            //     status: "warning",
-            //     duration: 5000,
-            //     isClosable: true,
-            //     position: "top-left",
-            // });
+            toast({
+                title: "Please enter something in search",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "top-left",
+            });
             return;
         }
         // console.log(search);
